@@ -1,0 +1,28 @@
+Feel free to use/add test cases for the different algorithms!
+
+FCFS INPUT:
+3
+3 FCFS
+4 5 9
+1 30 4
+2 20 1
+2 FCFS
+100 10 1
+10 70 1
+3 FCFS
+4 6 9
+50 1 2
+3 1 1
+
+OUTPUT:
+1
+1 1 30X
+31 2 20X
+51 0 5X
+2
+10 1 70X
+100 0 10X
+3
+3 2 1X
+4 0 6X
+50 1 1X
