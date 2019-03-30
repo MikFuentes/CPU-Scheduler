@@ -8,6 +8,7 @@ struct process {
 	int arrivalTime; //arrival time into the ready queue
 	int	burstTime; //burst time in the CPU
 	int priority; //priority of the process
+	int index; //index (based off of arrival into ready queue)
 };
 
 void swap(int *xp, int *yp) 
@@ -79,23 +80,17 @@ string output(string algorithm, int numProcesses){
 		processDeck.at(i).arrivalTime = arrival;
 		processDeck.at(i).burstTime = burst;
 		processDeck.at(i).priority = priority;
+		processDeck.at(i).index = i+1;
 	}
 
-	if (algorithm == "FCFS"){
+	if (algorithm == "FCFS"){ //DONE	
 		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
-		int index = 1;
+
 		int elapsed = newProcessDeck.at(0).arrivalTime;
 		for(int i = 0; i<numProcesses;i++){
 			
-			//for getting the index
-			for(int j = 0; j<numProcesses;j++){
-				if (newProcessDeck.at(i).arrivalTime == processDeck.at(j).arrivalTime){
-					index = j;
-				}
-			}
-			
 			chart += to_string(elapsed) + " "; 
-			chart += to_string(index) + " ";
+			chart += to_string(newProcessDeck.at(i).index) + " ";
 			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
 			
 			//for getting elapsed time
@@ -115,8 +110,75 @@ string output(string algorithm, int numProcesses){
 	
 	}
 	
-	else if (algorithm == "SRTF"){
-	
+	else if (algorithm == "SRTF"){ //NOT DONE,,,WTF IS THIS
+		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+
+		int elapsed = newProcessDeck.at(0).arrivalTime;
+		string cpuTime = "";
+		int i = 0;
+		while(numProcesses!=0){ //will keep going until all processes have terminated
+			
+			//if the arrival time of the next processes is < the burst time of the current program 
+				//switch to the next process:
+					//CPUtime = arrivalTime of the next process
+					//update burstTime of current process (current burstTime - arrivalTime)
+			
+			//if burstTime of current process < arrivalTime of the next	
+				//terminate the program: (because it's finished running)
+					//CPUtime += X
+					//numProcesses-=1
+			
+			if (newProcessDeck.at(i).burstTime < newProcessDeck.at(i+1).arrivalTime){
+				cpuTime += "X";
+				numProcesses-=1;
+			}
+				
+			i++;
+			
+			
+		}
+			// for(int i = 0; i<numProcesses;i++){
+				// cpuTime = to_string(newProcessDeck.at(i).burstTime); //cpuTime = burstTime
+				
+				// //if the arrival time of the next process is < the burst time of the current program
+				// //burst time = arrival time of the next processes
+				// //switch to the next process
+				
+				// if (i<numProcesses-1) { //is not the last process
+					// if(newProcessDeck.at(i+1).arrivalTime < newProcessDeck.at(i).burstTime){
+						// cout << "arrivalTime of next: " << newProcessDeck.at(i+1).arrivalTime << " < " << " burstTime of current: " << newProcessDeck.at(i).burstTime << endl;
+						// newProcessDeck.at(i).burstTime -= newProcessDeck.at(i+1).arrivalTime; //update the remaining burst time
+						// cpuTime = to_string(newProcessDeck.at(i+1).arrivalTime); //use arrival time
+					// }
+				// }
+				
+				
+				// //newProcessDeck.at(i).burstTime += 				
+				
+				// chart += to_string(elapsed) + " "; 
+				// chart += to_string(newProcessDeck.at(i).index) + " ";
+				
+				// //for getting elapsed time
+				// if (i<numProcesses-1) {
+					
+					// //if the arrivalTime of the next process is > the elapsed time
+					// if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
+						
+						
+						// elapsed = newProcessDeck.at(i+1).arrivalTime;
+						
+						
+						// cpuTime += "X";
+						
+						// //numProcesses -=1;
+					// }
+					// else{
+						// elapsed += newProcessDeck.at(i).burstTime;
+					// }
+				// }
+				// chart += cpuTime + "\n";
+			// }
+		
 	}
 	
 	else if (algorithm == "P"){
