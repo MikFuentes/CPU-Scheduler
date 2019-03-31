@@ -104,10 +104,10 @@ INPUT: (for different arrival times):
 EXPECTED OUTPUT:
 1
 5 3 8x
-13 1 2x
-15 5 5x
-20 4 4x
-24 2 1x
+13 4 4x
+17 1 2x
+19 2 1x
+20 5 5x
 
 #3
 INPUT: (for different arrival times tie breakers):
