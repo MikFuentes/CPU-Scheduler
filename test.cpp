@@ -186,7 +186,35 @@ string output(string algorithm, int numProcesses){
 	}
 	
 	else if (algorithm == "NPP"){
-	
+       		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+      		int index = 1;
+       		int elapsed = newProcessDeck.at(0).arrivalTime;
+       		for(int i = 0; i<numProcesses;i++){
+       
+			//for getting the index
+			for(int j = 0; j<numProcesses;j++){
+				if (newProcessDeck.at(i).arrivalTime == processDeck.at(j).arrivalTime){
+ 					if (newProcessDeck.at(i).priority > processDeck.at(j).priority){
+					    index = j;
+					}
+				}
+			}
+			
+			chart += to_string(elapsed) + " "; 
+			chart += to_string(index) + " ";
+			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
+			
+			//for getting elapsed time
+			if (i<numProcesses-1) {
+				//if the arrivalTime of the next process is > the elapsed time
+				if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
+					elapsed = newProcessDeck.at(i+1).arrivalTime;
+				}
+				else{
+					elapsed += newProcessDeck.at(i).burstTime;
+				}
+			}
+		}
 	}
 	
 	else if (algorithm == "RR") {
