@@ -38,3 +38,14 @@ OUTPUT:
 12 2 1X
 13 5 5X
 18 3 8X
+
+NPP INPUT (for different arrival times):
+1 5 NPP 6 2 2 11 1 2 5 8 3 8 4 1 7 5 2
+
+EXPECTED OUTPUT:
+1
+6 1 2X
+8 5 5X
+13 4 4X
+17 2 1X
+18 3 8X
