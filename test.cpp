@@ -61,6 +61,19 @@ deque<process> sortAscendingDeck(deque<process> dp, int size, string sortBy){
 			swap(dp.at(minIndex), dp.at(i));
 		}
 	}
+	else if(sortBy == "index"){
+		for(i=0; i<size-1; i++)
+		{
+			minIndex = i;
+			for(j = i+1; j<size; j++){	
+				if(dp.at(j).index < dp.at(minIndex).index)
+				{	
+					minIndex = j;
+				}
+			}
+			swap(dp.at(minIndex), dp.at(i));
+		}
+	}
 	return dp;
 }
 
@@ -185,23 +198,59 @@ string output(string algorithm, int numProcesses){
 	
 	}
 	
-	else if (algorithm == "NPP"){
-       		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
-      		int index = 1;
+	else if (algorithm == "NPP"){ //only works when arrival time is the same			
+       		// deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+			deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "priority");
+			
+			for (process p: newProcessDeck) cout << p.index << endl;
+			
+			// //for handling arrivalTime
+				// for(int j = 0; j<numProcesses-1;j++){ //2 1 3 --> 1 2 3 --> 3 1 2
+					// for (process p: newProcessDeck) cout << p.index << endl;
+					// if(newProcessDeck.at(j).arrivalTime > newProcessDeck.at(j+1).arrivalTime){
+						// swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+					// }
+				// }
+			
+
+			
+			
+			
+			
+			
        		int elapsed = newProcessDeck.at(0).arrivalTime;
+			
+			//newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "priority");
+			
        		for(int i = 0; i<numProcesses;i++){
-       
-			//for getting the index
-			for(int j = 0; j<numProcesses;j++){
-				if (newProcessDeck.at(i).arrivalTime == processDeck.at(j).arrivalTime){
- 					if (newProcessDeck.at(i).priority > processDeck.at(j).priority){
-					    index = j;
+			
+			
+				// if (i<numProcesses-1){
+					// for (int j = 0; j<numProcesses-1;j++){
+						// //if the arrival time of the next process is < arrivalTime of the current 
+						// if(newProcessDeck.at(j+1).arrivalTime < newProcessDeck.at(j).arrivalTime){
+							// //swap places
+							// swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						// }
+					// }
+				// }
+			
+			//for handling processes w/ same priority
+			if (i<numProcesses-1){
+				for(int j = 0; j<numProcesses-1;j++){ 
+					//if the priority of the next processes is equal to the current
+					if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority){
+						//if the index of the next process is less than the current
+						if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+							//swap places
+							swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						}	
 					}
 				}
 			}
 			
 			chart += to_string(elapsed) + " "; 
-			chart += to_string(index) + " ";
+			chart += to_string(newProcessDeck.at(i).index) + " ";
 			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
 			
 			//for getting elapsed time
