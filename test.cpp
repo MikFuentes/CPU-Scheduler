@@ -208,7 +208,111 @@ string output(string algorithm, int numProcesses){
 			}
 		}
 	}
-	
+		
+	else if (algorithm == "NPP"){ //FAILS TEST#2, 3
+		cout << "before:" << endl; 
+		testPrint(processDeck, numProcesses);
+		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		int elapsed = newProcessDeck.at(0).arrivalTime;
+		cout << "sorted by arrival" << endl;
+		testPrint(newProcessDeck,numProcesses);
+		for(int i = 0; i<numProcesses;i++){
+			
+			//for handling processes w/ same priority
+			for(process p : newProcessDeck) {
+				
+				if (i<numProcesses-1){
+					for(int j = 0; j<numProcesses-1;j++){ 
+						//if the arrivalTime of the next processes is equal to the current
+						if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+							cout << "hi" << endl;
+							cout << "priority of next: " << newProcessDeck.at(j+1).priority;
+							cout << "\npriority of current: " << newProcessDeck.at(j).priority << endl;
+							//if the priorty of the next process < than the current
+							if(newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
+								cout << "hello" << endl;
+								//swap places
+								swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+							} 
+							//if there is a tie breaker between priority, use lower index
+							else if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority) {
+								if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+									cout << "yeet" << endl;
+									swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+								}
+							}
+						}
+						else { //SOMETHING HERE 1 5 NPP 6 2 2 11 1 2 5 8 3 8 4 1 7 5 2
+							
+							//if the next processes arrives before the current processes terminates
+							if(newProcessDeck.at(i+1).arrivalTime < elapsed){ 
+								cout <<"say"<<endl;
+								
+								minIndex = i;
+								for(int k = i+1; k<numProcesses; k++){	
+									if(newProcessDeck.at(k).priority < newProcessDeck.at(minIndex).priority)
+									{	
+										minIndex = k;
+									}
+								}
+								swap(dp.at(minIndex), dp.at(i));
+							
+								//go through all processes
+								for(int k = i+1; k<numProcesses;k++){
+								//if the priority of the next is < the priorty of the current
+									if(newProcessDeck.at(k+1).priority < newProcessDeck.at(k).priority){
+										//if the arrivalTime of the next is < the current
+										if (newProcessDeck.at(k+1).arrivalTime < newProcessDeck.at(k).arrivalTime){
+											cout << "hello" << endl;
+											//swap places
+											swap(newProcessDeck.at(k+1), newProcessDeck.at(k));
+										}
+									} 
+								}
+								//if the burst of the next is less than the current
+								//WHY ARE WE USING BURST TIME AGAIN??
+								if(newProcessDeck.at(i+1).burstTime < newProcessDeck.at(i).burstTime){ 
+									//swap places
+									cout <<"what"<<endl;
+									swap(newProcessDeck.at(i+1), newProcessDeck.at(i));
+								}
+							}
+						}
+						
+						// if(newProcessDeck.at(j+1).arrivalTime < newProcessDeck.at(j).arrivalTime+newProcessDeck.at(j).burstTime){
+							// if(newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
+								// swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+							// }
+						// }
+						
+					//if the arrival time of the next process is < elapsed time (arrival + burst)
+					//if the priority of the next is < the priority of the current
+					//swap
+					cout << "i " << i << " j "<<j << endl;
+					testPrint(newProcessDeck, numProcesses);
+					}
+					
+					
+					
+				}
+			}
+			
+			chart += to_string(elapsed) + " "; 
+			chart += to_string(newProcessDeck.at(i).index) + " ";
+			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
+			
+			//for getting elapsed time
+			if (i<numProcesses-1) {
+				//if the arrivalTime of the next process is > the elapsed time
+				if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
+					elapsed = newProcessDeck.at(i+1).arrivalTime;
+				}
+				else{
+					elapsed += newProcessDeck.at(i).burstTime;
+				}
+			}
+		}
+	}
 	else if (algorithm == "SRTF"){ //NOT DONE,,,WTF IS THIS
 		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
 
@@ -279,69 +383,10 @@ string output(string algorithm, int numProcesses){
 			// }
 		
 	}
-	
-	else if (algorithm == "P"){
-	
-	}
-	
-	else if (algorithm == "NPP"){ //FAILS TEST#2, 3
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
-		int elapsed = newProcessDeck.at(0).arrivalTime;
-		//testPrint(newProcessDeck,numProcesses);
-		for(int i = 0; i<numProcesses;i++){
-			
-			//for handling processes w/ same priority
-			if (i<numProcesses-1){
-				
-					for(int j = 0; j<numProcesses-1;j++){ 
-						//if the arrivalTime of the next processes is equal to the current
-						if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
-							//if the priorty of the next process < than the current
-							if(newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
-								//swap places
-								swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
-							} 
-							//if there is a tie breaker between priority, use lower index
-							else if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority) {
-								if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
-									swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
-								}
-							}
-						}
-						//testPrint(newProcessDeck,numProcesses);
-						//cout <<"j: " << j << endl;
-						
-					}//testPrint(newProcessDeck,numProcesses);
-					
-					if(newProcessDeck.at(i+1).arrivalTime < elapsed){ 
-						//if the burst of the next is less than the current
-						if(newProcessDeck.at(i+1).priority < newProcessDeck.at(i).priority){ 
-							//swap places
-							swap(newProcessDeck.at(i+1), newProcessDeck.at(i));
-						} 
-					}
-					//testPrint(newProcessDeck,numProcesses);
-				
-			}
-			
-			chart += to_string(elapsed) + " "; 
-			chart += to_string(newProcessDeck.at(i).index) + " ";
-			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
-			
-			//for getting elapsed time
-			if (i<numProcesses-1) {
-				//if the arrivalTime of the next process is > the elapsed time
-				if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
-					elapsed = newProcessDeck.at(i+1).arrivalTime;
-				}
-				else{
-					elapsed += newProcessDeck.at(i).burstTime;
-				}
-			}
-		}
-	}
-	
 	else if (algorithm == "RR") {
+	
+	}
+	else if (algorithm == "P"){
 	
 	}
 	return chart;
