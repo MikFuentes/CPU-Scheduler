@@ -102,6 +102,19 @@ string output(string algorithm, int numProcesses){
 		int elapsed = newProcessDeck.at(0).arrivalTime;
 		for(int i = 0; i<numProcesses;i++){
 			
+			if (i<numProcesses-1){
+				for(int j = 0; j<numProcesses-1;j++){ 
+					//if the arrival of the next processes is equal to the current
+					if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+						//if the index of the next process is less than the current
+						if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+							//swap places
+							swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						}	
+					}
+				}
+			}
+			
 			chart += to_string(elapsed) + " "; 
 			chart += to_string(newProcessDeck.at(i).index) + " ";
 			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
