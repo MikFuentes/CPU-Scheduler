@@ -31,16 +31,16 @@ OUTPUT:
 15 4 6X
 
 #3
-INPUT: (from moodle)
-1 5 FCFS 6 2 1 6 1 1 6 8 1 6 4 1 6 5 1
+INPUT: (from moodle, same arrival times)
+1 5 FCFS 5 2 1 5 1 1 5 8 1 5 4 1 5 5 1
 
 OUTPUT:
 1
-6 1 2X
-8 2 1X
-9 3 8X
-17 4 4X
-21 5 5X
+5 1 2X
+7 2 1X
+8 3 8X
+16 4 4X
+20 5 5X
 
 //SJF 
 #1 
