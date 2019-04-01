@@ -209,13 +209,13 @@ string output(string algorithm, int numProcesses){
 		}
 	}
 		
-	else if (algorithm == "NPP"){ //FAILS TEST#2, 3
-		cout << "before:" << endl; 
-		testPrint(processDeck, numProcesses);
+		else if (algorithm == "NPP"){ //FAILS TEST#3
+		//cout << "before:" << endl; 
+		//testPrint(processDeck, numProcesses);
 		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
 		int elapsed = newProcessDeck.at(0).arrivalTime;
-		cout << "sorted by arrival" << endl;
-		testPrint(newProcessDeck,numProcesses);
+		//cout << "sorted by arrival" << endl;
+		//testPrint(newProcessDeck,numProcesses);
 		for(int i = 0; i<numProcesses;i++){
 			
 			//for handling processes w/ same priority
@@ -225,19 +225,19 @@ string output(string algorithm, int numProcesses){
 					for(int j = 0; j<numProcesses-1;j++){ 
 						//if the arrivalTime of the next processes is equal to the current
 						if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
-							cout << "hi" << endl;
-							cout << "priority of next: " << newProcessDeck.at(j+1).priority;
-							cout << "\npriority of current: " << newProcessDeck.at(j).priority << endl;
+							//cout << "hi" << endl;
+							//cout << "priority of next: " << newProcessDeck.at(j+1).priority;
+							//cout << "\npriority of current: " << newProcessDeck.at(j).priority << endl;
 							//if the priorty of the next process < than the current
 							if(newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
-								cout << "hello" << endl;
+								//cout << "hello" << endl;
 								//swap places
 								swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
 							} 
 							//if there is a tie breaker between priority, use lower index
 							else if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority) {
 								if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
-									cout << "yeet" << endl;
+									//cout << "yeet" << endl;
 									swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
 								}
 							}
@@ -246,50 +246,22 @@ string output(string algorithm, int numProcesses){
 							
 							//if the next processes arrives before the current processes terminates
 							if(newProcessDeck.at(i+1).arrivalTime < elapsed){ 
-								cout <<"say"<<endl;
 								
-								minIndex = i;
-								for(int k = i+1; k<numProcesses; k++){	
-									if(newProcessDeck.at(k).priority < newProcessDeck.at(minIndex).priority)
-									{	
-										minIndex = k;
-									}
-								}
-								swap(dp.at(minIndex), dp.at(i));
-							
-								//go through all processes
-								for(int k = i+1; k<numProcesses;k++){
-								//if the priority of the next is < the priorty of the current
-									if(newProcessDeck.at(k+1).priority < newProcessDeck.at(k).priority){
-										//if the arrivalTime of the next is < the current
-										if (newProcessDeck.at(k+1).arrivalTime < newProcessDeck.at(k).arrivalTime){
-											cout << "hello" << endl;
-											//swap places
-											swap(newProcessDeck.at(k+1), newProcessDeck.at(k));
-										}
-									} 
-								}
 								//if the burst of the next is less than the current
 								//WHY ARE WE USING BURST TIME AGAIN??
-								if(newProcessDeck.at(i+1).burstTime < newProcessDeck.at(i).burstTime){ 
+								if(newProcessDeck.at(i+1).priority < newProcessDeck.at(i).priority){ 
 									//swap places
-									cout <<"what"<<endl;
+									//cout <<"what"<<endl;
 									swap(newProcessDeck.at(i+1), newProcessDeck.at(i));
 								}
 							}
 						}
 						
-						// if(newProcessDeck.at(j+1).arrivalTime < newProcessDeck.at(j).arrivalTime+newProcessDeck.at(j).burstTime){
-							// if(newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
-								// swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
-							// }
-						// }
-						
 					//if the arrival time of the next process is < elapsed time (arrival + burst)
 					//if the priority of the next is < the priority of the current
 					//swap
-					cout << "i " << i << " j "<<j << endl;
-					testPrint(newProcessDeck, numProcesses);
+					//cout << "i " << i << " j "<<j << endl;
+					//testPrint(newProcessDeck, numProcesses);
 					}
 					
 					
