@@ -109,38 +109,120 @@ string output(string algorithm, int numProcesses, int Q){
 
 	if (algorithm == "FCFS"){ //DONE	
 		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
-
-		int elapsed = newProcessDeck.at(0).arrivalTime;
 		
-		for(int i = 0; i<numProcesses;i++){
-			if (i<numProcesses-1){
-				for(int j = 0; j<numProcesses-1;j++){ 
-					//if the arrival of the next processes is equal to the current
-					if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
-						//if the index of the next process is less than the current
-						if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
-							//swap places
-							swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
-						}	
-					}
-				}
-			}
-			
-			chart += to_string(elapsed) + " "; 
-			chart += to_string(newProcessDeck.at(i).index) + " ";
-			chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
-			
-			//for getting elapsed time
-			if (i<numProcesses-1) {
-				//if the arrivalTime of the next process is > the elapsed time
-				if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
-					elapsed = newProcessDeck.at(i+1).arrivalTime;
-				}
-				else{
-					elapsed += newProcessDeck.at(i).burstTime;
-				}
+		//check for any ties in arrival and rearrange according to lower index
+		for(int j = 0; j<numProcesses-1;j++){ 
+			//if the arrival of the next processes is equal to the current
+			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+				//if the index of the next process is less than the current
+				if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+					//swap places
+					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+				}	
 			}
 		}
+
+		//empty "queue"
+		deque<process> queue;
+		
+		testPrint(newProcessDeck, numProcesses);
+		
+		int elapsed = newProcessDeck.at(0).arrivalTime;
+		
+		int time = 0;
+		
+		int i = 0; //0 or 1??
+		
+		//while there are still processes to run
+		while(numProcesses !=0){
+			cout << "time: " << time << endl;
+			
+			//check all the processes
+			for(process p : newProcessDeck){
+				//if the arrivalTime matches the time that has passed
+				if(time == p.arrivalTime){
+					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
+					queue.push_back(p);	 //put it at the end of the queue
+				}
+			}
+			
+			//check what's in the queue
+			for(process p : queue){
+				cout << p.arrivalTime << " " << p.burstTime << " " << p.priority << " " << p.index << endl;
+			}
+			
+			//if the queue has stuff in it
+			if (!(queue.empty())) {
+				//what's on top?
+				cout << "top: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
+				
+				//if it doesn't need to run anymore (can be terminated)
+				if(queue.front().burstTime <= 1){ //should be 1 or 0?
+					cout << "TERMINATE NEXT CC: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
+					
+					//CHART
+					chart += to_string(time-i) + " ";
+					chart += to_string(queue.front().index) + " ";
+					chart += to_string(i) + "X\n";
+					
+					//remove it 
+					queue.pop_front();
+					numProcesses--;
+					i = 0; //reset the quantum time
+					
+					//if the queue is STILL not emtpy...
+					if(!(queue.empty())) { 
+						//start the next process right away
+						queue.front().burstTime -= 1;  
+						i++;
+					}
+				}
+				//if it still needs to complete the process
+				else{ 
+					//let it run (reduce the burst time)
+					queue.front().burstTime -= 1;  
+					i++;
+				}
+			}
+			time++;
+			cout << endl;
+		}
+		
+		//OLD IMPLEMENTATION
+	
+		// deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+
+		// int elapsed = newProcessDeck.at(0).arrivalTime;
+		
+		// for(int i = 0; i<numProcesses;i++){
+			// if (i<numProcesses-1){
+				// for(int j = 0; j<numProcesses-1;j++){ 
+					// //if the arrival of the next processes is equal to the current
+					// if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+						// //if the index of the next process is less than the current
+						// if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+							// //swap places
+							// swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						// }	
+					// }
+				// }
+			// }
+			
+			// chart += to_string(elapsed) + " "; 
+			// chart += to_string(newProcessDeck.at(i).index) + " ";
+			// chart += to_string(newProcessDeck.at(i).burstTime) + "X\n";
+			
+			// //for getting elapsed time
+			// if (i<numProcesses-1) {
+				// //if the arrivalTime of the next process is > the elapsed time
+				// if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
+					// elapsed = newProcessDeck.at(i+1).arrivalTime;
+				// }
+				// else{
+					// elapsed += newProcessDeck.at(i).burstTime;
+				// }
+			// }
+		// }
 	}
 	
 	else if (algorithm == "SJF"){ //DONE
@@ -291,81 +373,6 @@ string output(string algorithm, int numProcesses, int Q){
 	else if (algorithm == "SRTF"){ //NOT DONE,,,WTF IS THIS
 		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
 
-		int elapsed = newProcessDeck.at(0).arrivalTime;
-		string cpuTime = "";
-		int i = 0;
-		while(numProcesses!=0){ //will keep going until all processes have terminated
-			
-			//if the arrival time of the next processes is < the burst time of the current program 
-				//switch to the next process:
-					//CPUtime = arrivalTime of the next process
-					//update burstTime of current process (current burstTime - arrivalTime)
-			
-			//if burstTime of current process < arrivalTime of the next	
-				//terminate the program: (because it's finished running)
-					//CPUtime += X
-					//numProcesses-=1
-			
-			if (newProcessDeck.at(i).burstTime < newProcessDeck.at(i+1).arrivalTime){
-				cpuTime += "X";
-				numProcesses-=1;
-			}
-				
-			i++;
-			
-			
-		}
-			// for(int i = 0; i<numProcesses;i++){
-				// cpuTime = to_string(newProcessDeck.at(i).burstTime); //cpuTime = burstTime
-				
-				// //if the arrival time of the next process is < the burst time of the current program
-				// //burst time = arrival time of the next processes
-				// //switch to the next process
-				
-				// if (i<numProcesses-1) { //is not the last process
-					// if(newProcessDeck.at(i+1).arrivalTime < newProcessDeck.at(i).burstTime){
-						// cout << "arrivalTime of next: " << newProcessDeck.at(i+1).arrivalTime << " < " << " burstTime of current: " << newProcessDeck.at(i).burstTime << endl;
-						// newProcessDeck.at(i).burstTime -= newProcessDeck.at(i+1).arrivalTime; //update the remaining burst time
-						// cpuTime = to_string(newProcessDeck.at(i+1).arrivalTime); //use arrival time
-					// }
-				// }
-				
-				
-				// //newProcessDeck.at(i).burstTime += 				
-				
-				// chart += to_string(elapsed) + " "; 
-				// chart += to_string(newProcessDeck.at(i).index) + " ";
-				
-				// //for getting elapsed time
-				// if (i<numProcesses-1) {
-					
-					// //if the arrivalTime of the next process is > the elapsed time
-					// if (newProcessDeck.at(i+1).arrivalTime > elapsed+newProcessDeck.at(i).burstTime){
-						
-						
-						// elapsed = newProcessDeck.at(i+1).arrivalTime;
-						
-						
-						// cpuTime += "X";
-						
-						// //numProcesses -=1;
-					// }
-					// else{
-						// elapsed += newProcessDeck.at(i).burstTime;
-					// }
-				// }
-				// chart += cpuTime + "\n";
-			// }
-		
-	}
-	else if (algorithm == "RR") { //DONE (OMG??)
-		//ALTERNATE IMPLEMENTATION
-		//create another empty deque
-		//only go through that stack
-		//PUT AT THE BOTTOM OF THE QUEUE
-		
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
-
 		//empty "queue"
 		deque<process> queue;
 		
@@ -413,7 +420,7 @@ string output(string algorithm, int numProcesses, int Q){
 					//remove it 
 					queue.pop_front();
 					numProcesses--;
-					i = 0; //reset the quantam time
+					i = 0; //reset the quantum time
 					
 					//start the next process right away
 					queue.front().burstTime -= 1;  
@@ -421,14 +428,14 @@ string output(string algorithm, int numProcesses, int Q){
 				}
 				//if it still needs to complete the process
 				else{ 
-					//if the quantam time hasn't been reached yet
+					//if the quantum time hasn't been reached yet
 					if(i != Q){
 						//let it run (reduce the burst time)
 						queue.front().burstTime -= 1;  
 						i++;
 						
 					}
-					//if the quantam time has been reached
+					//if the quantum time has been reached
 					else if(i == Q) {
 						
 						//CHART
@@ -437,7 +444,113 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += to_string(i) + "\n";
 						
 						//remove from the top and move to the bottom
-						cout << "STOP! QuantamTime has been reached!" << endl;
+						cout << "STOP! quantumTime has been reached!" << endl;
+						queue.push_back(queue.front()); //get the first element and push to the bottom
+						queue.pop_front(); //delete the top
+						i = 0; //reset the time
+						
+						//start the next process right away
+						queue.front().burstTime -= 1;  
+						i++;
+					}
+				}
+			}
+			time++;
+			cout << endl;
+		}
+		
+	}
+	else if (algorithm == "RR") { //DONE (OMG??)
+		
+		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		
+		//check for any ties in arrival and rearrange according to lower index
+		for(int j = 0; j<numProcesses-1;j++){ 
+			//if the arrival of the next processes is equal to the current
+			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+				//if the index of the next process is less than the current
+				if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+					//swap places
+					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+				}	
+			}
+		}
+
+		//empty "queue"
+		deque<process> queue;
+		
+		testPrint(newProcessDeck, numProcesses);
+		
+		int elapsed = newProcessDeck.at(0).arrivalTime;
+		
+		int time = 0;
+		
+		int i = 0; //0 or 1??
+		
+		//while there are still processes to run
+		while(numProcesses !=0){
+			cout << "time: " << time << endl;
+			
+			//check all the processes
+			for(process p : newProcessDeck){
+				//if the arrivalTime matches the time that has passed
+				if(time == p.arrivalTime){
+					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
+					queue.push_back(p);	 //put it at the end of the queue
+				}
+			}
+			
+			// //check what's in the queue
+			for(process p : queue){
+				cout << p.arrivalTime << " " << p.burstTime << " " << p.priority << " " << p.index << endl;
+			}
+			
+			//if the queue has stuff in it
+			if (!(queue.empty())) {
+				//what's on top?
+				cout << "top: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
+				
+				//if it doesn't need to run anymore (can be terminated)
+				if(queue.front().burstTime <= 1){ //should be 1 or 0?
+					cout << "TERMINATE NEXT CC: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
+					
+					//CHART
+					chart += to_string(time-i) + " ";
+					chart += to_string(queue.front().index) + " ";
+					chart += to_string(i) + "X\n";
+					
+					//remove it 
+					queue.pop_front();
+					numProcesses--;
+					i = 0; //reset the quantum time
+					
+					
+					//if the queue is STILL not emtpy...
+					if(!(queue.empty())) { 
+						//start the next process right away
+						queue.front().burstTime -= 1;  
+						i++;
+					}
+				}
+				//if it still needs to complete the process
+				else{ 
+					//if the quantum time hasn't been reached yet
+					if(i != Q){
+						//let it run (reduce the burst time)
+						queue.front().burstTime -= 1;  
+						i++;
+						
+					}
+					//if the quantum time has been reached
+					else if(i == Q) {
+						
+						//CHART
+						chart += to_string(time-i) + " ";
+						chart += to_string(queue.front().index) + " ";
+						chart += to_string(i) + "\n";
+						
+						//remove from the top and move to the bottom
+						cout << "STOP! quantumTime has been reached!" << endl;
 						queue.push_back(queue.front()); //get the first element and push to the bottom
 						queue.pop_front(); //delete the top
 						i = 0; //reset the time
@@ -470,12 +583,9 @@ int main(){
 		cin >> algorithm;
 		if (algorithm == "RR"){
 			cin >> Q;
-			//cout << "Q:" << Q <<endl;
 		} 
 		
-		//cout << numProcesses << " " << algorithm << " " << Q << endl;
 		answer += output(algorithm, numProcesses, Q);
-	
 	}
 	cout << answer << "\n\n" << endl;
 	return 0;
