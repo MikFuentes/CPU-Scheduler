@@ -2,30 +2,66 @@
 3 3 1X
 4 1 6X
 50 2 1X
+CPU Utilization: 16.00% over 50CCs
+Throughput: 1 in 5CCs
+Avg. Waiting Time: 2.67CCs
+Avg. Turnaround Time: 22.67CCs
+Avg. Response Time: 19.00CCs
+
 2
-1 3 5X
-6 1 4X
-10 2 6X
-16 4 7X
-3
 5 3 8X
 13 4 4X
 17 1 2X
 19 2 1X
 20 5 5X
-4
+CPU Utilization: 80.00% over 25CCs
+Throughput: 3 in 20CCs
+Avg. Waiting Time: 9.80CCs
+Avg. Turnaround Time: 19.80CCs
+Avg. Response Time: 14.80CCs
+
+3
 0 1 1X
 5 3 2X
 7 2 3X
 10 4 2X
-5
+CPU Utilization: 70.00% over 10CCs
+Throughput: 3 in 11CCs
+Avg. Waiting Time: 2.50CCs
+Avg. Turnaround Time: 8.50CCs
+Avg. Response Time: 5.50CCs
+
+4
 0 2 20
 20 3 3X
 23 1 5X
 28 4 1X
 29 2 5X
-6
+36 28
+CPU Utilization: 94.44% over 36CCs
+Throughput: 1 in 28CCs
+Avg. Waiting Time: 20.00CCs
+Avg. Turnaround Time: 29.50CCs
+Avg. Response Time: 17.75CCs
+
+5
 0 1 5X
 10 4 3X
 13 3 5X
 20 2 6X
+CPU Utilization: 75.00% over 20CCs
+Throughput: 2 in 14CCs
+Avg. Waiting Time: 6.50CCs
+Avg. Turnaround Time: 16.50CCs
+Avg. Response Time: 10.75CCs
+
+6
+1 3 5X
+6 1 4X
+10 2 6X
+16 4 7X
+CPU Utilization: 90.00% over 10CCs
+Throughput: 1 in 10CCs
+Avg. Waiting Time: 7.25CCs
+Avg. Turnaround Time: 14.75CCs
+Avg. Response Time: 8.25CCs
