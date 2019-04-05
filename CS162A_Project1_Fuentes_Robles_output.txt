@@ -37,7 +37,6 @@ Avg. Response Time: 5.50CCs
 23 1 5X
 28 4 1X
 29 2 5X
-36 28
 CPU Utilization: 94.44% over 36CCs
 Throughput: 1 in 28CCs
 Avg. Waiting Time: 20.00CCs
