@@ -1,4 +1,4 @@
-# Scheduling Algorithms Program
+# CPU Scheduling Simulator
 
 This program outputs the Gantt charts of various scheduling algorithm given the arrival time, burst time, and priority of an inputted number of processes. 
 It contains scheduling algorithms such as: 
