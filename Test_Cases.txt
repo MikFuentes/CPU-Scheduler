@@ -1,6 +1,3 @@
-Hi Steph! uwu
-Feel free to use/add test cases here for the different algorithms! - Mik
-
 //FCFS 
 #1
 INPUT:
