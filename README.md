@@ -34,9 +34,9 @@ Each test case requires two inputs:
 
 ### Processes
 Each process requires three `int` values to represent the following information for each process:
-1. Arrival time, the time the process enters the ready queue
-2. Burst time, the amount of CPU time required for the process to complete its execution
-3. Priority, the 'importance' of each process
+1. **Arrival time**, the time the process enters the ready queue
+2. **Burst time**, the amount of CPU time required for the process to complete its execution
+3. **Priority**, the 'importance' of each process
 
 The program will continue to take inputs until enough test cases are provided.
 
