@@ -1,13 +1,13 @@
 # CPU Scheduling Simulator
 
-This program outputs the Gantt charts of various scheduling algorithm given the arrival time, burst time, and priority of an inputted number of processes. 
-It contains scheduling algorithms such as: 
+This program outputs the Gantt charts of various scheduling algorithms given the arrival time, burst time, and priority of an inputted number of processes. 
+It can simulate scheduling algorithms such as: 
 - **First Come First Served (FCFS)**
 - **Shortest Job First (SJF)**
 - **Non-preemptive Priority (NPP)**
 - **Shortest Remaining Time First (SRTF)**
 - **Preemptive Priority (PP)**
-- **Round Robin (RR)**
+- **Round-Robin (RR)**
 
 ## Building
 
@@ -31,6 +31,7 @@ Each test case requires two inputs:
 1. An `int` value representing the number of processes to test
 2. A `string` value which specifies which scheduling algorithm to use
    - e.g. `FCFS, SJF, NPP, SRTF, PP, or RR`
+3. (optional) A `int` value representing quantum time, the amount of time each process is permitted to run at a given time when using the Round-Robin scheduling algorithm
 
 ### Processes
 Each process requires three `int` values to represent the following information for each process:
@@ -51,29 +52,35 @@ After receving all the inputs, the program will output each test case and the Ga
 - Returns nothing
 The swap function takes in two integers and uses a temp variable to store the first integer and swap the positions of the two.
 
-### deque<process> `sortAscendingDeck()`: 
-
-Takes the deque of processes, the size of the deque, and a string sortBy in order to sort all the processes in the deque.
+### `sortAscendingDeque()`: 
+Sorts a deque in ascending order according to the given string
 
 - Parameters
-- `deque dp` - Deque of processes
-- `int size` - Size of the deque
-- `string sortBy` - Specifies the method of sorting
+   - `dp` - Deque of processes
+   - `size` - Size of the deque
+   - `sortBy` - Specifies the method of sorting
+      - `arrivalTime` - Sorts the processes according to ascending arrival time
+      - `burstTime` - Sorts the processess according to ascending burst time
+      - `priority` - Sorts the processes according to ascending priority
+- Returns
+   -  `dp` - The sorted deque of processes
 
-   - `arrivalTime`: Sorts the processes according to ascending arrival time by 
+### `output()`:
+Generates a Gantt chart of the processes based on the given scheduling algorithim
+- Parameters
+   - `algorithm` - Scheduling algorithm to use
+   - `numProcesses` - Number of processes to be scheduled
+   - `Q` - Quantum time (used for Round-Robin)
+- Returns
+   - `chart` - A Gantt chart
 
-   - If `sortBy` is `burstTime`, it will sort the processes according to ascending burst time by checking the current minimum burst time and comparing it to the burst time of the next processes then swapping the position of the two if the next process has a smaller burst time than the current minimum.
+### `main()`:
+The main method of the program. 
 
-   - If `sortBy` is `priority`, it will sort the processes according to ascending priority
+We initialize an `int` for the number of test cases and get the input for this, and we also initialize a string answer which will be used to output the Gantt charts of each test case.
 
-### string output:
-the output function takes in the scheduling algorithm to be used, the number of processes to be scheduled, and the quantum time that is used for RR 
-We initialize a string chart for the output of the gantt chart, a deque of processes, and integers for the arrival time, burst time, and priority of the processes 
-There is a loop to get the arrival time, burst time, and priority of each of the processes and the index of the processes starts at 1 
-The if-else statements check which scheduling algorithm to follow, and how this is done will be explained further in the video.
-This function returns the gantt chart to be printed
-
-### int main:
-We initialize an int for the number of test cases and get the input for this, and we also initialize a string answer which will be used to output the Gantt charts of each test case.
 For each test case, we have the number of processes and the algorithm to be used. If RR is the inputted algorithm, it also asks for the input of quantum time, otherwise quantum time is always set to 0
+
 For each test case, we then call the output function to get each Gantt chart, and in the end all of them are printed.
+
+Calls `output()` for each test case to get the Gantt chart.
