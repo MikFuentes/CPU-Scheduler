@@ -23,6 +23,10 @@ g++ -std=c++11 main.cpp -o main
 
 After successfully compiling, open `main.exe` to run the program.
 
+```
+main < input_file > output_file
+```
+
 ## Input
 The program first takes an `int` value representing the number of cases to test.
 
@@ -46,15 +50,14 @@ After receving all the inputs, the program will output each test case and the Ga
 ## What are the program's functions and operations?
 
 ### `swap()`
+Swaps the places of two processes in a deque (via pass by reference)
 - Parameters
-  - `int` pointer
-  - `int` pointer
+  - `xp` - The process x
+  - `yp` - The process y
 - Returns nothing
-The swap function takes in two integers and uses a temp variable to store the first integer and swap the positions of the two.
 
 ### `sortAscendingDeque()`: 
 Sorts a deque in ascending order according to the given string
-
 - Parameters
    - `dp` - Deque of processes
    - `size` - Size of the deque
@@ -72,7 +75,7 @@ Generates a Gantt chart of the processes based on the given scheduling algorithi
    - `numProcesses` - Number of processes to be scheduled
    - `Q` - Quantum time (used for Round-Robin)
 - Returns
-   - `chart` - A Gantt chart
+   - `chart` - A Gantt chart of the processes
 
 ### `main()`:
 The main method of the program. 
