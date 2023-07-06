@@ -9,7 +9,8 @@ It can simulate scheduling algorithms such as:
 - **Preemptive Priority (PP)**
 - **Round-Robin (RR)**
 
-## Building
+---
+# Building
 
 Compile `main.cpp` from the command line using:
 ```
@@ -21,21 +22,38 @@ Some devices may require you to compile using a different C++ version. You can s
 g++ -std=c++11 main.cpp -o main
 ```
 
-After successfully compiling, open `main.exe` to run the program.
+---
+# Running the Program
+To run the program, type the name of the program using the command:
+```
+main
+```
 
+## Using Input/Output Files
+If you want to use an input file to run the program, follow the command template below:
+```
+main < input_file
+```
+
+If you would like to use an input and output file to run the program, use the command template below:
 ```
 main < input_file > output_file
 ```
 
-## Input
-The program first takes an `int` value representing the number of cases to test.
+---
+# Input
+The program first takes an `int` value representing the number of cases to test. 
 
-### Test Cases
+The program will then loop through every test case asking for input.
+
+## Test Cases
 Each test case requires two inputs:
 1. An `int` value representing the number of processes to test
 2. A `string` value which specifies which scheduling algorithm to use
    - e.g. `FCFS, SJF, NPP, SRTF, PP, or RR`
-3. (optional) A `int` value representing quantum time, the amount of time each process is permitted to run at a given time when using the Round-Robin scheduling algorithm
+3. (optional) An `int` value representing quantum time, the amount of time each process is permitted to run at a given time when using the Round-Robin scheduling algorithm
+
+The program will then loop through every process in the test case, with each loop asking input.
 
 ### Processes
 Each process requires three `int` values to represent the following information for each process:
@@ -43,20 +61,21 @@ Each process requires three `int` values to represent the following information 
 2. **Burst time**, the amount of CPU time required for the process to complete its execution
 3. **Priority**, the 'importance' of each process
 
-The program will continue to take inputs until enough test cases are provided.
+The program will continue to take inputs until enough information for the test cases and its processes are provided.
 
 After receving all the inputs, the program will output each test case and the Gantt chart of the processes according to the inputted scheduling algorithm. 
 
-## What are the program's functions and operations?
+---
+# What are the program's functions and operations?
 
-### `swap()`
+## `swap()`
 Swaps the places of two processes in a deque (via pass by reference)
 - Parameters
   - `xp` - The process x
   - `yp` - The process y
 - Returns nothing
 
-### `sortAscendingDeque()`: 
+## `sortAscendingDeque()`: 
 Sorts a deque in ascending order according to the given string
 - Parameters
    - `dp` - Deque of processes
@@ -68,7 +87,7 @@ Sorts a deque in ascending order according to the given string
 - Returns
    -  `dp` - The sorted deque of processes
 
-### `output()`:
+## `output()`:
 Generates a Gantt chart of the processes based on the given scheduling algorithim
 - Parameters
    - `algorithm` - Scheduling algorithm to use
@@ -77,13 +96,5 @@ Generates a Gantt chart of the processes based on the given scheduling algorithi
 - Returns
    - `chart` - A Gantt chart of the processes
 
-### `main()`:
-The main method of the program. 
-
-We initialize an `int` for the number of test cases and get the input for this, and we also initialize a string answer which will be used to output the Gantt charts of each test case.
-
-For each test case, we have the number of processes and the algorithm to be used. If RR is the inputted algorithm, it also asks for the input of quantum time, otherwise quantum time is always set to 0
-
-For each test case, we then call the output function to get each Gantt chart, and in the end all of them are printed.
-
-Calls `output()` for each test case to get the Gantt chart.
+## `main()`:
+The main method of the program. Refer to the input section above for more information.
