@@ -8,29 +8,36 @@
 using namespace std;
 
 struct process {
-	int arrivalTime; //arrival time into the ready queue
-	int	burstTime; //burst time in the CPU
-	int priority; //priority of the process
-	int index; //index (based off of arrival into ready queue)
+	int arrivalTime; // Arrival time into the ready queue
+	int	burstTime; // Burst time in the CPU
+	int priority; // Priority of the process
+	int index; // Index (based off of arrival into ready queue)
 };
 
-void swap(int *xp, int *yp) 
+// void swap(int *xp, int *yp) 
+// { 
+//     int temp = *xp; 
+//     *xp = *yp; 
+//     *yp = temp; 
+// }
+
+void swap(int &xp, int &yp) 
 { 
-    int temp = *xp; 
-    *xp = *yp; 
-    *yp = temp; 
+    int temp = xp; 
+    xp = yp; 
+    yp = temp; 
 } 
 
-void testPrint(deque<process> dp, int size) {
-	for(int i=0; i<size; i++)
-	{
-		cout << dp.at(i).arrivalTime << " ";
-		cout << dp.at(i).burstTime << " ";
-		cout << dp.at(i).priority << " ";
-		cout << dp.at(i).index << endl;
-	}
-	cout << "\n";
-}
+// void testPrint(deque<process> dp, int size) {
+// 	for(int i=0; i<size; i++)
+// 	{
+// 		cout << dp.at(i).arrivalTime << " ";
+// 		cout << dp.at(i).burstTime << " ";
+// 		cout << dp.at(i).priority << " ";
+// 		cout << dp.at(i).index << endl;
+// 	}
+// 	cout << "\n";
+// }
 
 string twoDecimals(float f){
 	stringstream stream;
@@ -39,58 +46,72 @@ string twoDecimals(float f){
 	return s;
 }
 
-//Selection sort 
-deque<process> sortAscendingDeck(deque<process> dp, int size, string sortBy){
-	//You can sort the processes by arrivalTime, burstTime, or priority
+/* Method sortAscendingDeque sorts a list of processes according to arrivalTime, burstTime, or priority.
+
+Utilizes a selection sort approach.
+
+@param dp 		deuque<process> containing the processes
+@param size 	int value indicating the number of processes
+@param sortBy 	string value indicating what to sort the 
+*/ 
+deque<process> sortAscendingDeque(deque<process> dp, int size, string sortBy){
 	int i, j, minIndex;
+
+	// if(sortBy == "arrivalTime" || sortBy == "burstTime" || sortBy == "priority" || sortBy == "index"){
+	// 	string key = sortBy;
+	// }
+
+	// for(i = 0; i < size-1; i++){
+	// 	minIndex = i;
+	// 	for(j = i+1; j < size; j++){
+	// 		if(dp.at(j)[sortBy] < dp.at(minIndex).sortBy){	
+	// 			minIndex = j;
+	// 		}			
+	// 	}
+	// 	swap(dp.at(minIndex), dp.at(i));
+	// }
+
+		// Compares the min arrival time with the arrival time of the next process. If the next process has a smaller arrival time than the current minimum, swap positions.
 	if(sortBy == "arrivalTime"){
-		for(i=0; i<size-1; i++)
-		{
+		for(i = 0; i < size-1; i++){
 			minIndex = i;
-			for(j = i+1; j<size; j++){	
-				if(dp.at(j).arrivalTime < dp.at(minIndex).arrivalTime)
-				{	
+			for(j = i+1; j < size; j++){
+				if(dp.at(j).arrivalTime < dp.at(minIndex).arrivalTime){	
 					minIndex = j;
-				}
+				}			
 			}
 			swap(dp.at(minIndex), dp.at(i));
 		}
 	}
 	else if(sortBy == "burstTime"){
-		for(i=0; i<size-1; i++)
-		{
+		for(i = 0; i < size-1; i++){
 			minIndex = i;
-			for(j = i+1; j<size; j++){	
-				if(dp.at(j).burstTime < dp.at(minIndex).burstTime)
-				{	
+			for(j = i+1; j < size; j++){
+				if(dp.at(j).burstTime < dp.at(minIndex).burstTime){	
 					minIndex = j;
-				}
+				}			
 			}
 			swap(dp.at(minIndex), dp.at(i));
 		}
 	}
 	else if(sortBy == "priority"){
-		for(i=0; i<size-1; i++)
-		{
+		for(i = 0; i < size-1; i++){
 			minIndex = i;
-			for(j = i+1; j<size; j++){	
-				if(dp.at(j).priority < dp.at(minIndex).priority)
-				{	
+			for(j = i+1; j < size; j++){
+				if(dp.at(j).priority < dp.at(minIndex).priority){	
 					minIndex = j;
-				}
+				}			
 			}
 			swap(dp.at(minIndex), dp.at(i));
 		}
 	}
 	else if(sortBy == "index"){
-		for(i=0; i<size-1; i++)
-		{
+		for(i = 0; i < size-1; i++){
 			minIndex = i;
-			for(j = i+1; j<size; j++){	
-				if(dp.at(j).index < dp.at(minIndex).index)
-				{	
+			for(j = i+1; j < size; j++){
+				if(dp.at(j).index < dp.at(minIndex).index){	
 					minIndex = j;
-				}
+				}			
 			}
 			swap(dp.at(minIndex), dp.at(i));
 		}
@@ -98,11 +119,19 @@ deque<process> sortAscendingDeck(deque<process> dp, int size, string sortBy){
 	return dp;
 }
 
+/* Method output sorts a list of processes according to arrivalTime, burstTime, or priority.
+
+Utilizes a selection sort approach.
+
+@param algorithm string value containing the processes
+@param size 	int value indicating the number of processes
+@param sortBy 	string value indicating what to sort the 
+*/ 
 string output(string algorithm, int numProcesses, int Q){
 	string chart;
 	
-	//make a deck of processes
-	deque<process> processDeck (numProcesses); //deck implementation of struct of processes
+	//make a deque of processes
+	deque<process> processDeque (numProcesses); //deque implementation of struct of processes
 	
 	int arrival, burst, priority;
 	int cpuTotal, tPutCC;
@@ -120,26 +149,28 @@ string output(string algorithm, int numProcesses, int Q){
 		cin >> burst;
 		cin >> priority;
 		
-		processDeck.at(i).arrivalTime = arrival;
-		processDeck.at(i).burstTime = burst;
-		processDeck.at(i).priority = priority;
-		processDeck.at(i).index = i+1;
+		processDeque.at(i)= {arrival, burst, priority, i+1};
+
+		// processDeque.at(i).arrivalTime = arrival;
+		// processDeque.at(i).burstTime = burst;
+		// processDeque.at(i).priority = priority;
+		// processDeque.at(i).index = i+1;
 	}
 	cin >> cpuTotal; //CPU utilization = elapsedTime/cpuTotal (e.g. 20/36 = 55.56%)
 	cin >> tPutCC; //Throughput = number of terminates/tPutCC (3 completed over 13 cc)
 
 	//Algorithms
 	if (algorithm == "FCFS"){ //DONE	
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 		
 		//check for any ties in arrival and rearrange according to lower index
 		for(int j = 0; j<numProcesses-1;j++){ 
 			//if the arrival of the next processes is equal to the current
-			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+			if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 				//if the index of the next process is less than the current
-				if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+				if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 					//swap places
-					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+					swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 				}	
 			}
 		}
@@ -147,21 +178,21 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		//testPrint(newProcessDeck, numProcesses);
+		//testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
 		int time = 0;
 		int i = 0; //0 or 1??
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		
 		//while there are still processes to run
 		while(numProcesses !=0){
 			// cout << "time: " << time << endl;
 			
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -179,12 +210,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -196,7 +227,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -245,17 +276,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
@@ -283,26 +314,26 @@ string output(string algorithm, int numProcesses, int Q){
 	}
 	
 	else if (algorithm == "SJF"){ //DONE
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		
-		for (process p: newProcessDeck) {
+		for (process p: newProcessDeque) {
 			//check for any ties in arrival and rearrange according to lower burstTime, if tie in burstTime, lower index
 			for(int j = 0; j<numProcesses-1;j++){ 
 				//if the arrival of the next processes is equal to the current
-				if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+				if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 					//if the burstTime is equal to the current
-					if(newProcessDeck.at(j+1).burstTime == newProcessDeck.at(j).burstTime) {
+					if(newProcessDeque.at(j+1).burstTime == newProcessDeque.at(j).burstTime) {
 						//if the index of the next process is less than the current
-						if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+						if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 							//swap places
-							swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+							swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 						}	
 					} //if the burstTime of the next is less than the current
-					else if (newProcessDeck.at(j+1).burstTime < newProcessDeck.at(j).burstTime){
+					else if (newProcessDeque.at(j+1).burstTime < newProcessDeque.at(j).burstTime){
 						//swap places
-						swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 					}
 				}
 			}
@@ -311,12 +342,12 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		int time = 0;
 		int i = 0;
 		
@@ -325,7 +356,7 @@ string output(string algorithm, int numProcesses, int Q){
 			// cout << "time: " << time << endl;
 			// cout << "i: " << to_string(i) << endl;
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){					
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -343,12 +374,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -360,7 +391,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -413,17 +444,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
@@ -471,26 +502,26 @@ string output(string algorithm, int numProcesses, int Q){
 	}
 		
 	else if (algorithm == "NPP"){ //NO SCHEDULING OUTPUT
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		
-		for (process p: newProcessDeck) {
+		for (process p: newProcessDeque) {
 			//check for any ties in arrival and rearrange according to lower priority, if tie in priority, lower index
 			for(int j = 0; j<numProcesses-1;j++){ 
 				//if the arrival of the next processes is equal to the current
-				if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+				if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 					//if the priority is equal to the current
-					if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority) {
+					if(newProcessDeque.at(j+1).priority == newProcessDeque.at(j).priority) {
 						//if the index of the next process is less than the current
-						if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+						if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 							//swap places
-							swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+							swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 						}	
 					} //if the priority of the next is less than the current
-					else if (newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
+					else if (newProcessDeque.at(j+1).priority < newProcessDeque.at(j).priority){
 						//swap places
-						swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 					}
 				}
 			}
@@ -499,12 +530,12 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		int time = 0;
 		int i = 0;
 		
@@ -513,7 +544,7 @@ string output(string algorithm, int numProcesses, int Q){
 			// cout << "time: " << time << endl;
 			// cout << "i: " << to_string(i) << endl;
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){					
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -531,12 +562,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -548,7 +579,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -601,17 +632,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
@@ -659,23 +690,23 @@ string output(string algorithm, int numProcesses, int Q){
 	}
 	
 	else if (algorithm == "PP"){ //WAIT TIME IS WEIRD
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 
 		//check for any ties in arrival and rearrange according to lower burstTime, if tie in burstTime, lower index
 		for(int j = 0; j<numProcesses-1;j++){ 
 			//if the arrival of the next processes is equal to the current
-			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+			if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 				//if the priority is equal to the current
-				if(newProcessDeck.at(j+1).priority == newProcessDeck.at(j).priority) {
+				if(newProcessDeque.at(j+1).priority == newProcessDeque.at(j).priority) {
 					//if the index of the next process is less than the current
-					if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+					if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 						//swap places
-						swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 					}	
 				} //if the priority of the next is less than the current
-				else if (newProcessDeck.at(j+1).priority < newProcessDeck.at(j).priority){
+				else if (newProcessDeque.at(j+1).priority < newProcessDeque.at(j).priority){
 					//swap places
-					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+					swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 				}
 			}
 		}
@@ -683,12 +714,12 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		
 		int time = 0;
 		
@@ -701,7 +732,7 @@ string output(string algorithm, int numProcesses, int Q){
 			// cout << "time: " << time << endl;
 			// cout << "i: " << to_string(i) << endl;
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){					
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -719,12 +750,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -736,7 +767,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -789,17 +820,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
@@ -935,23 +966,23 @@ string output(string algorithm, int numProcesses, int Q){
 	}
 	
 	else if (algorithm == "SRTF"){ //DONE
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 
 		//check for any ties in arrival and rearrange according to lower burstTime, if tie in burstTime, lower index
 		for(int j = 0; j<numProcesses-1;j++){ 
 			//if the arrival of the next processes is equal to the current
-			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+			if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 				//if the burstTime is equal to the current
-				if(newProcessDeck.at(j+1).burstTime == newProcessDeck.at(j).burstTime) {
+				if(newProcessDeque.at(j+1).burstTime == newProcessDeque.at(j).burstTime) {
 					//if the index of the next process is less than the current
-					if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+					if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 						//swap places
-						swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+						swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 					}	
 				}
 				//if the burstTime is equal to the current
-				else if(newProcessDeck.at(j+1).burstTime < newProcessDeck.at(j).burstTime){
-					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+				else if(newProcessDeque.at(j+1).burstTime < newProcessDeque.at(j).burstTime){
+					swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 				}
 			}
 		}
@@ -959,12 +990,12 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		//testPrint(newProcessDeck, numProcesses);
+		//testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		
 		int time = 0;
 		
@@ -977,7 +1008,7 @@ string output(string algorithm, int numProcesses, int Q){
 			//cout << "time: " << time << endl;
 			//cout << "i: " << to_string(i) << endl;
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){					
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -997,12 +1028,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -1014,7 +1045,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -1067,17 +1098,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
@@ -1217,16 +1248,16 @@ string output(string algorithm, int numProcesses, int Q){
 	}
 	else if (algorithm == "RR") { //DONE (OMG??)
 		
-		deque<process> newProcessDeck = sortAscendingDeck(processDeck, numProcesses, "arrivalTime");
+		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
 		
 		//check for any ties in arrival and rearrange according to lower index
 		for(int j = 0; j<numProcesses-1;j++){ 
 			//if the arrival of the next processes is equal to the current
-			if(newProcessDeck.at(j+1).arrivalTime == newProcessDeck.at(j).arrivalTime){
+			if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
 				//if the index of the next process is less than the current
-				if(newProcessDeck.at(j+1).index < newProcessDeck.at(j).index){
+				if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
 					//swap places
-					swap(newProcessDeck.at(j+1), newProcessDeck.at(j));
+					swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
 				}	
 			}
 		}
@@ -1234,10 +1265,10 @@ string output(string algorithm, int numProcesses, int Q){
 		//empty "queue"
 		deque<process> queue;
 		
-		// testPrint(newProcessDeck, numProcesses);
+		// testPrint(newProcessDeque, numProcesses);
 		int notIdleTime = 0;
 		bool running;
-		int elapsed = newProcessDeck.at(0).arrivalTime;
+		int elapsed = newProcessDeque.at(0).arrivalTime;
 		
 		int time = 0;
 		
@@ -1248,7 +1279,7 @@ string output(string algorithm, int numProcesses, int Q){
 			// cout << "time: " << time << endl;
 			
 			//check all the processes
-			for(process p : newProcessDeck){
+			for(process p : newProcessDeque){
 				//if the arrivalTime matches the time that has passed
 				if(time == p.arrivalTime){
 					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
@@ -1267,12 +1298,12 @@ string output(string algorithm, int numProcesses, int Q){
 			//FOR TURNAROUND TIME
 			//if the time matches the requested cc for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeck.size()-numProcesses;
+				throughput = newProcessDeque.size()-numProcesses;
 			}
 			//if the requested cc for throughput is more than the cpu has been used 
 			else if(tPutCC > time && numProcesses==1){
 				//it has completed all of the processes
-				throughput = newProcessDeck.size();
+				throughput = newProcessDeque.size();
 			}
 			
 			//FOR CPU UTILIZATION
@@ -1284,7 +1315,7 @@ string output(string algorithm, int numProcesses, int Q){
 			
 			//FOR RESPONSE TIME AND WAITING TIME
 			if(running){
-				for (process p: newProcessDeck){
+				for (process p: newProcessDeque){
 					//look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
@@ -1333,17 +1364,17 @@ string output(string algorithm, int numProcesses, int Q){
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
 						//Waiting time
-						float val = (waitTime/newProcessDeck.size())/1.0;
+						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
 						//Turnaround time
-						val = (tTime/newProcessDeck.size())/1.0;
+						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
 						//Response time
-						val = (rTime/newProcessDeck.size())/1.0;
+						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
