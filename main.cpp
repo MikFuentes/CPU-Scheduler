@@ -7,6 +7,8 @@
 
 using namespace std;
 
+int decimalPlaces = 2;
+
 struct process {
 	int arrivalTime; // Arrival time into the ready queue
 	int	burstTime; // Burst time in the CPU
@@ -56,68 +58,33 @@ Utilizes a selection sort approach.
 */ 
 deque<process> sortAscendingDeque(deque<process> dp, int size, string sortBy){
 	int i, j, minIndex;
-
-	// if(sortBy == "arrivalTime" || sortBy == "burstTime" || sortBy == "priority" || sortBy == "index"){
-	// 	string key = sortBy;
-	// }
-
-	// for(i = 0; i < size-1; i++){
-	// 	minIndex = i;
-	// 	for(j = i+1; j < size; j++){
-	// 		if(dp.at(j)[sortBy] < dp.at(minIndex).sortBy){	
-	// 			minIndex = j;
-	// 		}			
-	// 	}
-	// 	swap(dp.at(minIndex), dp.at(i));
-	// }
-
-		// Compares the min arrival time with the arrival time of the next process. If the next process has a smaller arrival time than the current minimum, swap positions.
-	if(sortBy == "arrivalTime"){
-		for(i = 0; i < size-1; i++){
-			minIndex = i;
-			for(j = i+1; j < size; j++){
-				if(dp.at(j).arrivalTime < dp.at(minIndex).arrivalTime){	
-					minIndex = j;
-				}			
+	for (i = 0; i < size - 1; i++){
+    	minIndex = i;
+		for (j = i + 1; j < size; j++){
+			if ((sortBy == "arrivalTime" && dp.at(j).arrivalTime < dp.at(minIndex).arrivalTime) ||
+				(sortBy == "burstTime" && dp.at(j).burstTime < dp.at(minIndex).burstTime) ||
+				(sortBy == "priority" && dp.at(j).priority < dp.at(minIndex).priority) ||
+				(sortBy == "index" && dp.at(j).index < dp.at(minIndex).index)){
+				minIndex = j;
 			}
-			swap(dp.at(minIndex), dp.at(i));
 		}
-	}
-	else if(sortBy == "burstTime"){
-		for(i = 0; i < size-1; i++){
-			minIndex = i;
-			for(j = i+1; j < size; j++){
-				if(dp.at(j).burstTime < dp.at(minIndex).burstTime){	
-					minIndex = j;
-				}			
-			}
-			swap(dp.at(minIndex), dp.at(i));
-		}
-	}
-	else if(sortBy == "priority"){
-		for(i = 0; i < size-1; i++){
-			minIndex = i;
-			for(j = i+1; j < size; j++){
-				if(dp.at(j).priority < dp.at(minIndex).priority){	
-					minIndex = j;
-				}			
-			}
-			swap(dp.at(minIndex), dp.at(i));
-		}
-	}
-	else if(sortBy == "index"){
-		for(i = 0; i < size-1; i++){
-			minIndex = i;
-			for(j = i+1; j < size; j++){
-				if(dp.at(j).index < dp.at(minIndex).index){	
-					minIndex = j;
-				}			
-			}
-			swap(dp.at(minIndex), dp.at(i));
-		}
+		swap(dp.at(minIndex), dp.at(i));
 	}
 	return dp;
 }
+
+void fcfsSort(deque<process> &deque){
+		// Check for ties in arrivalTime and swap according to lower index
+		for(int j = 0; j < deque.size()-1; j++){ 
+			process next = deque.at(j+1);
+			process current = deque.at(j);
+			if ((next.arrivalTime == current.arrivalTime) &&
+				(next.index < current.index)){
+				swap(next, current);
+			}
+		}
+}
+
 
 /* Method output sorts a list of processes according to arrivalTime, burstTime, or priority.
 
@@ -162,154 +129,133 @@ string output(string algorithm, int numProcesses, int Q){
 	//Algorithms
 	if (algorithm == "FCFS"){ //DONE	
 		deque<process> newProcessDeque = sortAscendingDeque(processDeque, numProcesses, "arrivalTime");
-		
-		//check for any ties in arrival and rearrange according to lower index
-		for(int j = 0; j<numProcesses-1;j++){ 
-			//if the arrival of the next processes is equal to the current
-			if(newProcessDeque.at(j+1).arrivalTime == newProcessDeque.at(j).arrivalTime){
-				//if the index of the next process is less than the current
-				if(newProcessDeque.at(j+1).index < newProcessDeque.at(j).index){
-					//swap places
-					swap(newProcessDeque.at(j+1), newProcessDeque.at(j));
-				}	
+		deque<process> queue;
+
+		// Sort; Check for ties in arrivalTime and swap according to lower index
+		for(int j = 0; j < newProcessDeque.size()-1; j++){ 
+			process next = newProcessDeque.at(j+1);
+			process current = newProcessDeque.at(j);
+			if ((next.arrivalTime == current.arrivalTime) &&
+				(next.index < current.index)){
+				swap(next, current);
 			}
 		}
-
-		//empty "queue"
-		deque<process> queue;
-		
-		//testPrint(newProcessDeque, numProcesses);
 		
 		int notIdleTime = 0;
 		bool running;
 		
+		int i = 0;
 		int time = 0;
-		int i = 0; //0 or 1??
 		int elapsed = newProcessDeque.at(0).arrivalTime;
 		
-		//while there are still processes to run
-		while(numProcesses !=0){
-			// cout << "time: " << time << endl;
-			
-			//check all the processes
+		while(numProcesses != 0){
 			for(process p : newProcessDeque){
-				//if the arrivalTime matches the time that has passed
-				if(time == p.arrivalTime){
-					p.burstTime +=1; //add 1 to the burst time so that it will "start" in the next cycle
-					queue.push_back(p);	 //put it at the end of the queue
+				// If the arrivalTime matches the time that has passed
+				if(p.arrivalTime == time){
+					// Add 1 to the burst time so that it will "start" in the next cycle, put it back in the queue
+					p.burstTime += 1; 
+					queue.push_back(p);
 				}
 			}
 			
-			// //check what's in the queue
-			// for(process p : queue){
-				// cout << p.arrivalTime << " " << p.burstTime << " " << p.priority << " " << p.index << endl;
-			// }
+			// SCHEDULING PROCESSING
 			
-			//SCHEDULING PROCESSING
-			
-			//FOR TURNAROUND TIME
-			//if the time matches the requested cc for throughput 
+			// FOR TURNAROUND TIME
+			// If the time matches the requested Clock Cycle (CC) for throughput 
 			if(tPutCC == time){
-				throughput = newProcessDeque.size()-numProcesses;
+				throughput = newProcessDeque.size() - numProcesses;
 			}
-			//if the requested cc for throughput is more than the cpu has been used 
-			else if(tPutCC > time && numProcesses==1){
-				//it has completed all of the processes
+			// If the requested CC for throughput is more than the CPU has used 
+			else if(tPutCC > time && numProcesses == 1){
+				// It has completed all of the processes
 				throughput = newProcessDeque.size();
 			}
 			
-			//FOR CPU UTILIZATION
-			//if the time matches the requested cc for CPU util or if the requested cc for CPU util is greater than what has been used
-			if(cpuTotal == time || (cpuTotal > time && numProcesses==1)){		
-				float val = ((notIdleTime/1.0)/cpuTotal)*100;
+			// FOR CPU UTILIZATION
+			// If the time matches the requested CC for CPU util or
+			// If the requested CC for CPU util is greater than what has been used
+			if(cpuTotal == time || (cpuTotal > time && numProcesses == 1)){		
+				float val = ((notIdleTime/1.0)/cpuTotal) * 100;
 				cpuUtilization = roundf(val * 100) / 100; 
 			}
 			
-			//FOR RESPONSE TIME AND WAITING TIME
+			// FOR RESPONSE TIME AND WAITING TIME
 			if(running){
 				for (process p: newProcessDeque){
-					//look for a match
+					// Look for a match
 					if((queue.front().burstTime == p.burstTime) && (queue.front().index == p.index)){
 						rTime += time-1;
 						break;
 					}
 				}
-				wTime++; //increase the waittime
+				wTime++; // Increase the waittime
 			}
 			
-			//if the queue has stuff in it
 			if (!(queue.empty())) {
 				notIdleTime++;
 				
-				//what's on top?
-				// cout << "top: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
-				
-				//if it doesn't need to run anymore (can be terminated)
-				if(queue.front().burstTime <= 1){ //should be 1 or 0?
-					// cout << "TERMINATE NEXT CC: " << queue.front().arrivalTime << " " << queue.front().burstTime << " " << queue.front().priority << " " << queue.front().index << endl;
+				// If it doesn't need to run anymore (can be terminated)
+				if(queue.front().burstTime <= 1){
 					
 					//CHART
 					chart += to_string(time-i) + " ";
 					chart += to_string(queue.front().index) + " ";
 					chart += to_string(i) + "X\n";
 					
-					//remove it 
+					// Remove it 
 					queue.pop_front();
 					numProcesses--;
+					i = 0; // Reset the time
 					
 					//SCHEDULING OUTPUT
-					//After the last process has been runt
+					//After the last process has been run
 					running = false;
-					tTime+= time+1;
-					if(numProcesses > 0){
-						// cout << "wTime: " << wTime<< endl; 
-						waitTime+=wTime;
-						// cout << "waitTime: " << waitTime<< endl; 
+					tTime += time+1;
+					if(numProcesses > 0){ 
+						waitTime += wTime;
 					}
 
 					if(numProcesses == 0){
-						
-						//CPU Utilization
+						// CPU Utilization
 						chart += "CPU Utilization: " + twoDecimals(cpuUtilization) + "% over " + to_string(cpuTotal) + "CCs\n";
 						
-						//Throughput
+						// Throughput
 						chart += "Throughput: " + to_string(throughput) + " in " + to_string(tPutCC) + "CCs\n";
 						
-						//Waiting time
+						// Waiting time
 						float val = (waitTime/newProcessDeque.size())/1.0;
 						waitTime = roundf(val * 100) / 100; 
 						chart += "Avg. Waiting Time: " + twoDecimals(waitTime) + "CCs\n";
 						
-						//Turnaround time
+						// Turnaround time
 						val = (tTime/newProcessDeque.size())/1.0;
 						tTime = roundf(val * 100) / 100; 
 						chart += "Avg. Turnaround Time: " + twoDecimals(tTime) + "CCs\n";
 						
-						//Response time
+						// Response time
 						val = (rTime/newProcessDeque.size())/1.0;
 						rTime = roundf(val * 100) / 100; 
 						chart += "Avg. Response Time: " + twoDecimals(rTime) + "CCs\n\n";
 					}
-					i = 0;
+
 					
-					//if the queue is STILL not emtpy...
+					// If the queue is STILL not emtpy...
 					if(!(queue.empty())) { 
-						//start the next process right away
+						// Start the next process right away
 						queue.front().burstTime -= 1;  
 						i++;
 						running = true;
 					}
 				}
-				//if it still needs to complete the process
+				// If it still needs to complete the process
 				else{
-					//let it run (reduce the burst time)
+					// Let it run (reduce the burst time)
 					queue.front().burstTime -= 1;  
 					i++;
 					running = true;
 				}
 			}
 			time++;
-			// cout << endl;
 		}
 	}
 	
